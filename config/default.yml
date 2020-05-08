@@ -1,0 +1,40 @@
+# Path Configuration
+dataset_path: 'sample_dataset'
+feature_path: 'feature/default'
+save_path: 'save/default'
+
+# Feature Configuration 
+sample_rate: 22050
+preemphasis: 0.97
+min_db: -80.0
+max_db: 20.0
+clip_val: 0.8
+spec_power: 1.3
+
+num_char: 29
+min_note: 51
+num_note: 
+length_c: 3
+
+fft_size: 1024
+win_size: 1024
+hop_size: 256
+
+spec_size: 513 
+spec_length: 97
+prev_length: 32
+
+# Model Configuration
+batch_size: 1
+size_factor: 48
+note_embed_size: 32
+text_embed_size: 256
+gamma: 1.0
+lambda_k: 0.001
+
+# Optimizer Configuration
+learn_rate: 1e-4
+betas: [0.5, 0.999]
+weight_decay: 1e-5
+step_epoch: 50
+
