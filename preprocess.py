@@ -74,12 +74,13 @@ def preprocess(filename, set_type, config):
 
     data_list = []
     for i in range(num_stride):
-        curr_start = i*config.data_stride + config.prev_length
+        text_start = i*config.data_stride
+        spec_start = i*config.data_stride + config.prev_length
 
-        t = text[curr_start:curr_start + config.spec_length]
-        n = note[curr_start:curr_start + config.spec_length]
-        s = spec[curr_start:curr_start + config.spec_length]
-        s_prev = spec[curr_start - config.prev_length:curr_start]
+        t = text[text_start:text_start + config.spec_length]
+        n = note[text_start:text_start + config.spec_length]
+        s = spec[spec_start:spec_start + config.spec_length]
+        s_prev = spec[spec_start - config.prev_length:spec_start]
 
         data = dict(text=t, note=n, spec_prev=s_prev, spec=s)
         data_list.append(data)
