@@ -88,7 +88,7 @@ def stft(y, config):
     spec_fn = Spectrogram(n_fft=config.fft_size, 
                           win_length=config.win_size, 
                           hop_length=config.hop_size)
-    y, spec_fn = set_device((y, spec_fn), config.device)
+    y, spec_fn = set_device((y, spec_fn), config.device, config.use_cpu)
     spec = torch.sqrt(spec_fn(y))
 
     return spec
@@ -96,7 +96,7 @@ def stft(y, config):
 def istft(magnitude, phase, config):
     window = torch.hann_window(config.win_size)
     stft_matrix = torch.stack((magnitude*torch.cos(phase), magnitude*torch.sin(phase)), dim=-1)
-    stft_matrix, window = set_device((stft_matrix, window), config.device)
+    stft_matrix, window = set_device((stft_matrix, window), config.device, config.use_cpu)
     y = torchaudio.functional.istft(stft_matrix,
                                     n_fft=config.fft_size,
                                     hop_length=config.hop_size,
@@ -107,14 +107,8 @@ def istft(magnitude, phase, config):
 
 def spectrogram(y, config, squeeze=True):
     spec = stft(y, config)
-    if config.norm_type == 'db':
-        spec = amp2db(spec) - config.ref_level_db
-        spec = normalize(spec, config.min_db)
-    elif config.norm_type == 'log':
-        min_level = db2amp(config.min_level_db)
-        spec = torch.log(torch.clamp(spec, min=min_level))
-    else:
-        raise AssertionError("Invalid normalization type!")
+    spec = amp2db(spec)
+    spec = normalize(spec, config.min_db, config.max_db, config.clip_val)
 
     if squeeze:
         spec = spec.squeeze(0)

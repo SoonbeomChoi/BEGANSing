@@ -1,40 +1,47 @@
 # Path Configuration
-dataset_path: 'sample_dataset'
-feature_path: 'feature/default'
-save_path: 'save/default'
+dataset_path: '../../Dataset/saebyul_dataset' # Path for raw dataset containing txt, mid, wav
+feature_path: 'feature/default' # Path for feature created using preprocess.py
+checkpoint_path: 'checkpoint/default' # Path for checkpoint and tensorboard log created using train.py
 
 # Feature Configuration 
-sample_rate: 22050
-preemphasis: 0.97
-min_db: -80.0
-max_db: 20.0
-clip_val: 0.8
+num_char: 47 # The types of characters
+min_note: 51 # Minimum MIDI note value
+num_note: 29 # The number of MIDI notes
+length_c: 3 # Specificed consonant length
+
+sample_rate: 22050 # Audio sampling rate  
+preemphasis: 0.97 # Pre-emphasis filter coefficient
+min_db: -80.0 # Minimum dB level of spectrogram
+max_db: 20.0 # Maximum dB level of spectrogram
+clip_val: 0.8 # Maximum value of normalized spectrogram (if clip_val: 0.8, normalized spectrogram range: -0.8 ~ 0.8)
 spec_power: 1.3
 
-num_char: 29
-min_note: 51
-num_note: 
-length_c: 3
+fft_size: 1024 # FFT size for fast-Fourier transform 
+win_size: 1024 # Window size for fast-Fourier transform 
+hop_size: 256 # Hop size for fast-Fourier transform 
 
-fft_size: 1024
-win_size: 1024
-hop_size: 256
-
-spec_size: 513 
-spec_length: 97
-prev_length: 32
+spec_length: 97 # The length of generated spectrogram per iteration
+prev_length: 32 # The length of previous-time spectrogram per iteration
+data_stride: 64
 
 # Model Configuration
-batch_size: 1
-size_factor: 48
-note_embed_size: 32
+size_factor: 48 # Factor for model size
+note_embed_size: 32 
 text_embed_size: 256
-gamma: 1.0
+gamma: 1.0 
 lambda_k: 0.001
 
 # Optimizer Configuration
 learn_rate: 1e-4
+decay_factor: 0.5
 betas: [0.5, 0.999]
 weight_decay: 1e-5
 step_epoch: 50
+save_epoch: 25
 
+# Train Configuration
+num_proc: 1
+batch_size: 1 # Training batch size 
+use_cpu: false
+device: [0]
+data_mode: 'single'

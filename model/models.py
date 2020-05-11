@@ -5,8 +5,8 @@ from layers import LinearNorm, ConvNorm, UNetDown, UNetUp
 class Embedding(nn.Module):
     def __init__(self, config):
         super(Embedding, self).__init__()
-        self.embedding_note = nn.Embedding(config.num_note, config.note_embed_dim)
-        self.embedding_text = nn.Embedding(config.num_char, config.text_embed_dim)
+        self.embedding_note = nn.Embedding(config.num_note, config.note_embed_size)
+        self.embedding_text = nn.Embedding(config.num_char, config.text_embed_size)
 
     def forward(self, x):
         embedded_note = self.embedding_note(x[:,:,0].long())
@@ -20,24 +20,24 @@ class Prenet(nn.Module):
     def __init__(self, config):
         super(Prenet, self).__init__()
 
-        input_dim = config.note_embed_dim + config.text_embed_dim
-        output_dim = config.dimension
+        input_size = config.note_embed_size + config.text_embed_size
+        output_size = config.fft_size//2 + 1
 
         conv_layers_prev = []
         for i in range(2):
-            conv_layers_prev += [   ConvNorm(output_dim, output_dim, kernel_size=5, stride=1, padding=2, w_init_gain='relu'),
-                                    nn.BatchNorm1d(output_dim),
+            conv_layers_prev += [   ConvNorm(output_size, output_size, kernel_size=5, stride=1, padding=2, w_init_gain='relu'),
+                                    nn.BatchNorm1d(output_size),
                                     nn.ReLU(),
                                     nn.Dropout(0.5)]
 
-        linear_layers = [   LinearNorm(input_dim, output_dim),
+        linear_layers = [   LinearNorm(input_size, output_size),
                             nn.ReLU(),
                             nn.Dropout(0.5)] 
 
         conv_layers = []
         for i in range(2):
-            conv_layers += [ConvNorm(output_dim, output_dim, kernel_size=5, stride=1, padding=2, w_init_gain='relu'),
-                            nn.BatchNorm1d(output_dim),
+            conv_layers += [ConvNorm(output_size, output_size, kernel_size=5, stride=1, padding=2, w_init_gain='relu'),
+                            nn.BatchNorm1d(output_size),
                             nn.ReLU(),
                             nn.Dropout(0.5)]
 
@@ -64,23 +64,23 @@ class Prenet(nn.Module):
 class UNet(nn.Module):
     def __init__(self, config):
         super(UNet, self).__init__()
-        self.down1 = UNetDown(1, config.size_coefficient, stride=(4, 4)) # 33 x 129
-        self.down2 = UNetDown(config.size_coefficient, 2*config.size_coefficient, stride=(1, 2)) # 33 x 65
-        self.down3 = UNetDown(2*config.size_coefficient, 4*config.size_coefficient, stride=(1, 2)) # 33 x 33
-        self.down4 = UNetDown(4*config.size_coefficient, 8*config.size_coefficient) # 17 x 17
-        self.down5 = UNetDown(8*config.size_coefficient, 8*config.size_coefficient) # 9 x 9
-        self.down6 = UNetDown(8*config.size_coefficient, 8*config.size_coefficient, dropout=0.5) # 5 x 5
-        self.down7 = UNetDown(8*config.size_coefficient, 8*config.size_coefficient, dropout=0.5) # 3 x 3
+        self.down1 = UNetDown(1, config.size_factor, stride=(4, 4)) # 33 x 129
+        self.down2 = UNetDown(config.size_factor, 2*config.size_factor, stride=(1, 2)) # 33 x 65
+        self.down3 = UNetDown(2*config.size_factor, 4*config.size_factor, stride=(1, 2)) # 33 x 33
+        self.down4 = UNetDown(4*config.size_factor, 8*config.size_factor) # 17 x 17
+        self.down5 = UNetDown(8*config.size_factor, 8*config.size_factor) # 9 x 9
+        self.down6 = UNetDown(8*config.size_factor, 8*config.size_factor, dropout=0.5) # 5 x 5
+        self.down7 = UNetDown(8*config.size_factor, 8*config.size_factor, dropout=0.5) # 3 x 3
 
-        self.up1 = UNetUp(8*config.size_coefficient, 8*config.size_coefficient, dropout=0.5) # 5 x 5
-        self.up2 = UNetUp(16*config.size_coefficient, 8*config.size_coefficient, dropout=0.5) # 9 x 9
-        self.up3 = UNetUp(16*config.size_coefficient, 8*config.size_coefficient, dropout=0.5) # 17 x 17
-        self.up4 = UNetUp(16*config.size_coefficient, 4*config.size_coefficient) # 33 x 33 
-        self.up5 = UNetUp(8*config.size_coefficient, 2*config.size_coefficient, stride=(1, 2)) # 33 x 65
-        self.up6 = UNetUp(4*config.size_coefficient, 1*config.size_coefficient, stride=(1, 2)) # 33 x 129
+        self.up1 = UNetUp(8*config.size_factor, 8*config.size_factor, dropout=0.5) # 5 x 5
+        self.up2 = UNetUp(16*config.size_factor, 8*config.size_factor, dropout=0.5) # 9 x 9
+        self.up3 = UNetUp(16*config.size_factor, 8*config.size_factor, dropout=0.5) # 17 x 17
+        self.up4 = UNetUp(16*config.size_factor, 4*config.size_factor) # 33 x 33 
+        self.up5 = UNetUp(8*config.size_factor, 2*config.size_factor, stride=(1, 2)) # 33 x 65
+        self.up6 = UNetUp(4*config.size_factor, 1*config.size_factor, stride=(1, 2)) # 33 x 129
 
         self.final = nn.Sequential(
-            nn.ConvTranspose2d(2*config.size_coefficient, 1, 5, stride=(3, 4), padding=2, bias=False), # 97 x 513
+            nn.ConvTranspose2d(2*config.size_factor, 1, 5, stride=(3, 4), padding=2, bias=False), # 97 x 513
             nn.Tanh()
         )
 
@@ -114,7 +114,7 @@ class Generator(nn.Module):
         prenet_output = self.prenet(x_embedded, y_prev)
         output = self.unet(prenet_output)
 
-        return prenet_output, output
+        return output
 
 class Discriminator(nn.Module):
     def __init__(self, config):
@@ -143,23 +143,23 @@ class Discriminator(nn.Module):
             return layers
 
         self.encoder = nn.Sequential(
-            nn.Conv2d(channels, config.size_coefficient, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(channels, config.size_factor, kernel_size=3, stride=1, padding=1),
             nn.ELU(True),
-            *down_block(config.size_coefficient, config.size_coefficient),
-            *down_block(config.size_coefficient, 2*config.size_coefficient),
-            *down_block(2*config.size_coefficient, 3*config.size_coefficient),
-            nn.Conv2d(3*config.size_coefficient, config.size_coefficient, kernel_size=1, stride=1, padding=0))
+            *down_block(config.size_factor, config.size_factor),
+            *down_block(config.size_factor, 2*config.size_factor),
+            *down_block(2*config.size_factor, 3*config.size_factor),
+            nn.Conv2d(3*config.size_factor, config.size_factor, kernel_size=1, stride=1, padding=0))
 
         self.decoder = nn.Sequential(
-            nn.Conv2d(config.size_coefficient, config.size_coefficient, kernel_size=1, stride=1, padding=0),
-            *up_block(config.size_coefficient, config.size_coefficient),
-            *up_block(config.size_coefficient, config.size_coefficient),
-            *up_block(config.size_coefficient, config.size_coefficient),
-            nn.Conv2d(config.size_coefficient, config.size_coefficient, kernel_size=4, stride=1, padding=2),
+            nn.Conv2d(config.size_factor, config.size_factor, kernel_size=1, stride=1, padding=0),
+            *up_block(config.size_factor, config.size_factor),
+            *up_block(config.size_factor, config.size_factor),
+            *up_block(config.size_factor, config.size_factor),
+            nn.Conv2d(config.size_factor, config.size_factor, kernel_size=4, stride=1, padding=2),
             nn.ELU(True),
-            nn.Conv2d(config.size_coefficient, config.size_coefficient, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(config.size_factor, config.size_factor, kernel_size=3, stride=1, padding=1),
             nn.ELU(True),
-            nn.Conv2d(config.size_coefficient, channels, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(config.size_factor, channels, kernel_size=3, stride=1, padding=1),
             nn.Tanh()
         )
 

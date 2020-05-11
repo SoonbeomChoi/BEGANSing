@@ -2,38 +2,33 @@ import os
 import torch 
 import torch.nn as nn
 
-def set_device(x, device):
-    use_cuda = False
+def set_device(x, device, use_cpu=False):
     multi_gpu = False
-    if len(device) == 1 and device[0] > 0:
-        use_cuda = True 
-    elif len(device) > 1:
-        use_cuda = True 
+    if len(device) > 1:
         multi_gpu = True 
 
     # When input is tensor 
     if isinstance(x, torch.Tensor): 
-        if use_cuda:
-            x = x.cuda(device[0] - 1)
-        else:
+        if use_cpu:
             x = x.cpu()
+        else:
+            x = x.cuda(device[0])
      # When input is model
     elif isinstance(x, nn.Module): 
-        if use_cuda:
-            if multi_gpu:
-                devices = [i - 1 for i in device]
-                torch.cuda.set_device(devices[0])
-                x = nn.DataParallel(x, device_ids=devices).cuda()
-            else: 
-                torch.cuda.set_device(device[0] - 1)
-                x.cuda(device[0] - 1)
-        else: 
+        if use_cpu:
             x.cpu()
+        else:
+            if multi_gpu:
+                torch.cuda.set_device(device[0])
+                x = nn.DataParallel(x, device_ids=device).cuda()
+            else: 
+                torch.cuda.set_device(device[0])
+                x.cuda(device[0])
     # When input is tuple 
     elif type(x) is tuple or type(x) is list:
         x = list(x)
         for i in range(len(x)):
-            x[i] = set_device(x[i], device)
+            x[i] = set_device(x[i], device, use_cpu)
         x = tuple(x) 
 
     return x 
@@ -110,21 +105,3 @@ def load_checkpoint(checkpoint_path, model, optimizer=None, verbose=False):
         objects = objects[0]
 
     return objects
-
-class LossLog(object):
-    def __init__(self):
-        self.iteration = 0
-        self.sum = 0.0
-        self.num = 0
-
-    def reset(self):
-        self.sum = 0.0
-        self.num = 0
-
-    def add(self, x, batch_size):
-        self.sum += batch_size*x
-        self.num += batch_size
-        self.iteration += 1
-
-    def avg(self):
-        return float(self.sum/self.num)

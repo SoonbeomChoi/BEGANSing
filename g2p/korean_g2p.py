@@ -14,8 +14,6 @@ COD = ['', 'kf', 'kk', 'ks', 'nf', 'nc', 'nh', 'tf',
        'kh', 'th', 'ph', 'h0', 'ng']
 RCD = ['kf', 'nf', 'tf', 'll', 'mf', 'pf', 'ng']
 
-num_char = len(ONS) + len(NUC) + len(RCD)
-
 def readfileUTF8(fname):
     f = open(fname, 'r')
     corpus = []
@@ -197,24 +195,6 @@ def graph2prono(graphs, rule_in, rule_out):
             prono_prev = prono_new
 
     return prono_new
-
-def reduce_ons(ons):
-    if ons is 'pp': ons = 'p0'
-    elif ons is 'tt': ons = 't0'
-    elif ons is 'kk': ons = 'k0'
-    elif ons is 'ss': ons = 's0'
-    elif ons is 'cc': ons = 'c0'
-
-    return ons
-
-def reduce_nuc(nuc):
-    if nuc is 'qq': nuc = 'ee'
-    elif nuc is 'yq': nuc = 'ye'
-    elif nuc is 'wo': nuc = 'we'
-    elif nuc is 'wq': nuc = 'we'
-    elif nuc is 'xi': nuc = 'ii'
-
-    return nuc
 
 class Phone(object):
     def __init__(self):
