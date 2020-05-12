@@ -1,6 +1,5 @@
 import yaml
 import argparse
-from termcolor import colored
 
 class Config(object):
     def __init__(self, config_file=None):
@@ -52,10 +51,10 @@ class Config(object):
             
     def verbose(self, v):
         if v:
-            print(colored('[ Configurations ]', 'green'))
+            print('[ Configurations ]')
             for var in vars(self):
                 value = getattr(self, var)
-                print(colored('| ', 'green') + colored(var, 'blue') + ': ' + str(value))
+                print('| ' + var + ': ' + str(value))
 
             print('\n')
 

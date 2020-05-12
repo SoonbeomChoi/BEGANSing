@@ -22,7 +22,7 @@ hop_size: 256 # Hop size for fast-Fourier transform
 
 spec_length: 97 # The length of generated spectrogram per iteration
 prev_length: 32 # The length of previous-time spectrogram per iteration
-data_stride: 64
+data_stride: 32
 
 # Model Configuration
 size_factor: 48 # Factor for model size
@@ -32,12 +32,10 @@ gamma: 1.0
 lambda_k: 0.001
 
 # Optimizer Configuration
-learn_rate: 1e-4
+learn_rate: 1.0E-4
 decay_factor: 0.5
 betas: [0.5, 0.999]
-weight_decay: 1e-5
-step_epoch: 50
-save_epoch: 25
+weight_decay: 1.0E-5
 
 # Train Configuration
 num_proc: 1
@@ -45,3 +43,6 @@ batch_size: 1 # Training batch size
 use_cpu: false
 device: [0]
 data_mode: 'single'
+step_epoch: 50
+save_epoch: 25
+stop_epoch: 500

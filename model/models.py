@@ -5,16 +5,15 @@ from layers import LinearNorm, ConvNorm, UNetDown, UNetUp
 class Embedding(nn.Module):
     def __init__(self, config):
         super(Embedding, self).__init__()
-        self.embedding_note = nn.Embedding(config.num_note, config.note_embed_size)
         self.embedding_text = nn.Embedding(config.num_char, config.text_embed_size)
+        self.embedding_note = nn.Embedding(config.num_note, config.note_embed_size)
 
     def forward(self, x):
-        embedded_note = self.embedding_note(x[:,:,0].long())
-        embedded_text = self.embedding_text(x[:,:,1].long())
+        text, note = x
+        text = self.embedding_text(text)
+        note = self.embedding_note(note)
 
-        embedded = torch.cat((embedded_note, embedded_text), dim=2)
-
-        return embedded
+        return torch.cat((text, note), dim=2)
 
 class Prenet(nn.Module):
     def __init__(self, config):
@@ -110,18 +109,16 @@ class Generator(nn.Module):
         self.unet = UNet(config)
 
     def forward(self, x, y_prev):
-        x_embedded = self.embedding(x)
-        prenet_output = self.prenet(x_embedded, y_prev)
-        output = self.unet(prenet_output)
+        h = self.embedding(x)
+        h = self.prenet(h, y_prev)
 
-        return output
+        return self.unet(h)
 
 class Discriminator(nn.Module):
     def __init__(self, config):
         super(Discriminator, self).__init__()
 
         channels = 1
-        if config.feature is 'magphs': channels = 2
 
         def down_block(input_size, output_size):
             layers = [  nn.Conv2d(input_size, input_size, kernel_size=3, stride=1, padding=1),
@@ -164,5 +161,6 @@ class Discriminator(nn.Module):
         )
 
     def forward(self, x):
-        encoder_output = self.encoder(x)
-        return self.decoder(encoder_output)
+        h = self.encoder(x)
+
+        return self.decoder(h)

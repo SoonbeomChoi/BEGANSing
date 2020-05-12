@@ -15,7 +15,7 @@ class SingleLoader(Dataset):
         self.file2memory(path)
 
     def __getitem__(self, index):
-        text, note, spec_prev, spec = self.data_list[index]
+        text, note, spec_prev, spec = self.data_list[index].values()
 
         x = (text, note)
         y_prev = spec_prev
@@ -29,7 +29,7 @@ class SingleLoader(Dataset):
     def file2memory(self, path):
         for basename in sorted(os.listdir(path)):
             data = torch.load(os.path.join(path, basename))
-            self.data_list.append(data)
+            self.data_list.extend(data)
 
 class MultiLoader(Dataset):
     def __init__(self, path):
@@ -46,7 +46,7 @@ class MultiLoader(Dataset):
         if self.file_index > 0:
             return_index = index - self.file_indices[self.file_index - 1]
 
-        text, note, spec_prev, spec = data[return_index]
+        text, note, spec_prev, spec = data[return_index].values()
 
         x = (text, note)
         y_prev = spec_prev
