@@ -18,6 +18,7 @@ from logger import Logger
 
 class AverageMeter(object):
     def __init__(self):
+        self.steps = 0
         self.reset()
 
     def reset(self):
@@ -25,7 +26,6 @@ class AverageMeter(object):
         self.sum = 0.0
         self.num = 0
         self.avg = 0.0
-        self.steps = 0
 
     def step(self, val, num=1):
         self.val = val
@@ -43,7 +43,7 @@ def main():
     checkpoint_path = create_path(config.checkpoint_path)
     config_basename = os.path.basename(config.file)
     config.save(os.path.join(checkpoint_path, config_basename))
-    logger = Logger(checkpoint_path)
+    logger = Logger(os.path.join(checkpoint_path, 'log'))
 
     dataloader = dataprocess.load(config)
     step_size = config.step_epoch*len(dataloader.train)
@@ -116,17 +116,17 @@ def main():
             learn_rate = param_group['lr']
 
         print("[Epoch %d/%d] [loss G train: %.5f] [loss G valid: %.5f] [loss D train: %.5f] [lr: %.6f]" %
-            (epoch, config.stop_epoch, lossG_train.avg, lossG_valid.avg, lossD_train, learn_rate))
+            (epoch, config.stop_epoch, lossG_train.avg, lossG_valid.avg, lossD_train.avg, learn_rate))
         
         lossG_train.reset()
         lossG_valid.reset()
         lossD_train.reset()
 
-        savename = os.path.join(checkpoint_path, 'latest')
+        savename = os.path.join(checkpoint_path, 'latest_')
         save_checkpoint(savename + 'G.pt', G, optimizerG, learn_rate, lossG_train.steps)
         save_checkpoint(savename + 'D.pt', D, optimizerD, learn_rate, lossD_train.steps)
         if epoch%config.save_epoch == 0:
-            savename = os.path.join(checkpoint_path, 'epoch' + str(epoch))
+            savename = os.path.join(checkpoint_path, 'epoch' + str(epoch) + '_')
             save_checkpoint(savename + 'G.pt', G, optimizerG, learn_rate, lossG_train.steps)
             save_checkpoint(savename + 'D.pt', D, optimizerD, learn_rate, lossD_train.steps)
 
