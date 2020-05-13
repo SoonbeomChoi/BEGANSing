@@ -51,7 +51,7 @@ def align_label(text, note, config):
 
         phone = torch.tensor(text[i].to_list())
         text_aligned[start:end] = phone.repeat_interleave(duration, dim=0)
-        note_aligned[start:end] = note[i][1]
+        note_aligned[start:end] = note[i][1] - config.min_note
 
     return text_aligned, note_aligned
 

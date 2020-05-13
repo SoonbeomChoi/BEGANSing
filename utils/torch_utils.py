@@ -18,11 +18,10 @@ def set_device(x, device, use_cpu=False):
         if use_cpu:
             x.cpu()
         else:
+            torch.cuda.set_device(device[0])
             if multi_gpu:
-                torch.cuda.set_device(device[0])
                 x = nn.DataParallel(x, device_ids=device).cuda()
             else: 
-                torch.cuda.set_device(device[0])
                 x.cuda(device[0])
     # When input is tuple 
     elif type(x) is tuple or type(x) is list:
