@@ -112,23 +112,23 @@ def main():
             logger.log_valid(lossL1, loss_advG, lossG, lossG_valid.steps)
             lossG_valid.step(lossG.item(), y.size(0))
 
-    for param_group in optimizerG.param_groups:
-        learn_rate = param_group['lr']
+        for param_group in optimizerG.param_groups:
+            learn_rate = param_group['lr']
 
-    print("[Epoch %d/%d] [loss G train: %.5f] [loss G valid: %.5f] [loss D train: %.5f] [lr: %.6f]" %
-          (epoch, config.stop_epoch, lossG_train.avg, lossG_valid.avg, lossD_train, learn_rate))
-    
-    lossG_train.reset()
-    lossG_valid.reset()
-    lossD_train.reset()
+        print("[Epoch %d/%d] [loss G train: %.5f] [loss G valid: %.5f] [loss D train: %.5f] [lr: %.6f]" %
+            (epoch, config.stop_epoch, lossG_train.avg, lossG_valid.avg, lossD_train, learn_rate))
+        
+        lossG_train.reset()
+        lossG_valid.reset()
+        lossD_train.reset()
 
-    savename = os.path.join(checkpoint_path, 'latest')
-    save_checkpoint(savename + 'G.pt', G, optimizerG, learn_rate, lossG_train.steps)
-    save_checkpoint(savename + 'D.pt', D, optimizerD, learn_rate, lossD_train.steps)
-    if epoch%config.save_epoch == 0:
-        savename = os.path.join(checkpoint_path, 'epoch' + str(epoch))
+        savename = os.path.join(checkpoint_path, 'latest')
         save_checkpoint(savename + 'G.pt', G, optimizerG, learn_rate, lossG_train.steps)
         save_checkpoint(savename + 'D.pt', D, optimizerD, learn_rate, lossD_train.steps)
+        if epoch%config.save_epoch == 0:
+            savename = os.path.join(checkpoint_path, 'epoch' + str(epoch))
+            save_checkpoint(savename + 'G.pt', G, optimizerG, learn_rate, lossG_train.steps)
+            save_checkpoint(savename + 'D.pt', D, optimizerD, learn_rate, lossD_train.steps)
 
 if __name__ == "__main__":
     main()
