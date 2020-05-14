@@ -1,6 +1,6 @@
 # Path Configuration
-file_structure: 2
-dataset_path: '../../Dataset/saebyul_dataset' # Path for raw dataset containing txt, mid, wav
+file_structure: 2 # File structure type, 1: all the files in one folder, 2: .txt, .mid, .wav are in separated folders
+dataset_path: 'sample_dataset' # Path for raw dataset containing txt, mid, wav
 feature_path: 'feature/default' # Path for feature created using preprocess.py
 checkpoint_path: 'checkpoint/default' # Path for checkpoint and tensorboard log created using train.py
 
@@ -23,27 +23,27 @@ hop_size: 256 # Hop size for fast-Fourier transform
 
 spec_length: 97 # The length of generated spectrogram per iteration
 prev_length: 32 # The length of previous-time spectrogram per iteration
-data_stride: 32
+data_stride: 32 # Amount of stride to increase the number of data in a epoch
 
 # Model Configuration
 size_factor: 48 # Factor for model size
-note_embed_size: 32 
-text_embed_size: 256
-gamma: 1.0 
-lambda_k: 0.001
+text_embed_size: 256 # Embedding dimension for text
+note_embed_size: 32 # Embedding dimension for note
+gamma: 1.0 # Gamma value for BEGAN objective
+lambda_k: 0.001 # Lambda k value for BEGAN objective
 
 # Optimizer Configuration
-learn_rate: 1.0E-4
-decay_factor: 0.5
-betas: [0.5, 0.999]
-weight_decay: 1.0E-5
+learn_rate: 1.0E-4 # Learning rate for training
+decay_factor: 0.5 # Learning rate decay amount per every step epoch
+step_epoch: 50 # Step epoch for learning rate decay
+betas: [0.5, 0.999] # Beta values for Adam optimizer
+weight_decay: 1.0E-5 # Weight decay value
 
 # Train Configuration
-num_proc: 1
+num_proc: 1 # The number of processes especially for preprocess.py
+use_cpu: false # Forcing code to use cpu and ignore 'device'
+device: [0] # List of CUDA device indices
 batch_size: 1 # Training batch size 
-use_cpu: false
-device: [0]
-data_mode: 'single'
-step_epoch: 50
-save_epoch: 25
-stop_epoch: 500
+data_mode: 'single' # Dataloader mode, single: data on memory, multi: loading data with queue
+save_epoch: 25 # Step epoch for saving checkpoint 
+stop_epoch: 500 # Epoch for stopping training

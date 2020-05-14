@@ -6,12 +6,12 @@ class Config(object):
         parser = None
         if config_files is None:
             parser = argparse.ArgumentParser()
-            parser.add_argument('-f', '--files', nargs="*", type=str, default=['./config/default.yml'])
+            parser.add_argument('-c', '--configs', nargs="*", type=str, default=['./config/default.yml'])
             namespace, _ = parser.parse_known_args()
-            config_files = namespace.files
+            config_files = namespace.configs
 
-        for f in config_files:
-            self.load(f)
+        for c in config_files:
+            self.load(c)
         self.parse(parser)
     
     def load(self, filename):

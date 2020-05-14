@@ -157,6 +157,9 @@ def main():
         file_list[set_type] = read_file_list(os.path.join(config.dataset_path, list_file))
 
     if config.num_proc > 1:
+        if config.use_cpu is False:
+            raise AssertionError("You can not use GPU with multiprocessing.")
+
         p = Pool(config.num_proc)
         for set_type in set_list:
             p.map(partial(preprocess, set_type=set_type, config=config), file_list[set_type])

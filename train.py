@@ -41,7 +41,7 @@ def main():
     config = Config()
 
     checkpoint_path = create_path(config.checkpoint_path)
-    config_basename = os.path.basename(config.files[0])
+    config_basename = os.path.basename(config.configs[0])
     config.save(os.path.join(checkpoint_path, config_basename))
     logger = Logger(os.path.join(checkpoint_path, 'log'))
 
