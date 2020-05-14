@@ -57,7 +57,19 @@ class MultiLoader(Dataset):
     def __len__(self):
         return self.file_indices[-1]
 
-def load(config):
+class InferLoader(Dataset):
+    def __init__(self, data):
+        self.data = data
+
+    def __getitem__(self, index):
+        text, note = self.data[index].values()
+
+        return (text, note)
+
+    def __len__(self):
+        return len(self.data)
+
+def load_train(config):
     if config.data_mode == 'single':
         Loader = SingleLoader
     elif config.data_mode == 'multi':
@@ -74,3 +86,9 @@ def load(config):
                                   shuffle=False, num_workers=config.num_proc)
 
     return DataSplit(dataloader_train, dataloader_valid, None)
+
+def load_infer(data, config):
+    dataset = InferLoader(data)
+    dataloader = DataLoader(dataset, batch_size=config.batch_size, shuffle=False)
+
+    return dataloader

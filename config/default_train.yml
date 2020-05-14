@@ -1,4 +1,5 @@
 # Path Configuration
+file_structure: 2
 dataset_path: '../../Dataset/saebyul_dataset' # Path for raw dataset containing txt, mid, wav
 feature_path: 'feature/default' # Path for feature created using preprocess.py
 checkpoint_path: 'checkpoint/default' # Path for checkpoint and tensorboard log created using train.py

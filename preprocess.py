@@ -55,40 +55,89 @@ def align_label(text, note, config):
 
     return text_aligned, note_aligned
 
-def preprocess(filename, set_type, config):
+def files4train(filename, config):
     basestem = os.path.basename(filename).replace('.wav', '')
-    txt_filename = os.path.join(config.dataset_path, 'txt', basestem + '.txt')
-    mid_filename = os.path.join(config.dataset_path, 'mid', basestem + '.mid')
-    wav_filename = os.path.join(config.dataset_path, 'wav', basestem + '.wav')
+    type_list = ['txt', 'mid', 'wav']
+    file_list = []
+    for t in type_list:
+        if config.file_structure == 1:
+            f = os.path.join(config.dataset_path, basestem + '.' + t)
+        elif config.file_structure == 2:
+            f = os.path.join(config.dataset_path, t, basestem + '.' + t)
+        else:
+            raise AssertionError("There is no file structure type for %s" % (config.file_structure))
+        
+        file_list.append(f)
 
-    text = load_text(txt_filename)
-    note = load_midi(mid_filename)
+    return file_list
+
+def files4infer(filename, config):
+    basestem = os.path.basename(filename).replace('.txt', '')
+    filepath = os.path.dirname(filename)
+    if config.file_structure == 2:
+        filepath = '/'.join(filepath.split('/')[:-1])
+
+    type_list = ['txt', 'mid']
+    file_list = []
+    for t in type_list:
+        if config.file_structure == 1:
+            f = os.path.join(filepath, basestem + '.' + t)
+        elif config.file_structure == 2:
+            f = os.path.join(filepath, t, basestem + '.' + t)
+        else:
+            raise AssertionError("There is no file structure type for %s" % (config.file_structure))
+
+        file_list.append(f)
+
+    return file_list
+
+def preprocess(filename, set_type, config):
+    infer = set_type is 'infer'
+    if not infer:
+        txt_file, mid_file, wav_file = files4train(filename, config)
+    else:
+        txt_file, mid_file = files4infer(filename, config)
+
+    text = load_text(txt_file)
+    note = load_midi(mid_file)
     text, note = align_label(text, note, config)
 
-    wave = dsp.load(wav_filename, config.sample_rate)
-    spec = dsp.spectrogram(wave, config).cpu().transpose(0, 1) # D x T -> T x D
-    spec = torch.cat((torch.zeros(config.prev_length, config.fft_size//2 + 1), spec))
+    data_stride = config.spec_length
+    num_stride = text.size(0)//data_stride
 
-    min_length = min(note.size(0), spec.size(0))
-    num_stride = (min_length - (config.spec_length + config.prev_length))//config.data_stride
+    if not infer:
+        wave = dsp.load(wav_file, config.sample_rate)
+        spec = dsp.spectrogram(wave, config).cpu().transpose(0, 1) # D x T -> T x D
+        spec = torch.cat((torch.zeros(config.prev_length, config.fft_size//2 + 1), spec))
 
+        min_length = min(text.size(0), spec.size(0))
+        data_stride = config.data_stride
+        num_stride = (min_length - (config.spec_length + config.prev_length))//data_stride
+    
     data_list = []
     for i in range(num_stride):
-        text_start = i*config.data_stride
-        spec_start = i*config.data_stride + config.prev_length
-
+        text_start = i*data_stride
         t = text[text_start:text_start + config.spec_length]
         n = note[text_start:text_start + config.spec_length]
-        s = spec[spec_start:spec_start + config.spec_length]
-        s_prev = spec[spec_start - config.prev_length:spec_start]
 
-        data = dict(text=t, note=n, spec_prev=s_prev, spec=s)
+        data = dict(text=t, note=n)
+
+        if not infer:
+            spec_start = i*data_stride + config.prev_length
+            s = spec[spec_start:spec_start + config.spec_length]
+            s_prev = spec[spec_start - config.prev_length:spec_start]
+
+            data = dict(text=t, note=n, spec_prev=s_prev, spec=s)
+
         data_list.append(data)
 
-    savename = os.path.join(config.feature_path, set_type, basestem + '.pt')
-    torch.save(data_list, savename)
+    if not infer:
+        basestem = os.path.basename(filename).replace('.wav', '')
+        savename = os.path.join(config.feature_path, set_type, basestem + '.pt')
+        torch.save(data_list, savename)
+        print(basestem)
 
-    print(basestem)
+    return data_list
 
 def read_file_list(filename):
     with open(filename) as f:

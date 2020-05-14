@@ -1,0 +1,10 @@
+# Path Configuration
+file_structure: 2
+text_file: '/home/soonbeom/Projects/Dataset/saebyul_dataset/txt/star_kr_0u.txt'
+checkpoint_file: 'checkpoint/default/epoch175_G.pt'
+
+# Infer Configuration
+num_proc: 1
+batch_size: 1
+use_cpu: true
+device: [0]

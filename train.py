@@ -41,11 +41,11 @@ def main():
     config = Config()
 
     checkpoint_path = create_path(config.checkpoint_path)
-    config_basename = os.path.basename(config.file)
+    config_basename = os.path.basename(config.files[0])
     config.save(os.path.join(checkpoint_path, config_basename))
     logger = Logger(os.path.join(checkpoint_path, 'log'))
 
-    dataloader = dataprocess.load(config)
+    dataloader = dataprocess.load_train(config)
     step_size = config.step_epoch*len(dataloader.train)
 
     G = Generator(config)
@@ -64,6 +64,7 @@ def main():
     lossG_valid = AverageMeter()
     lossD_train = AverageMeter()
     for epoch in range(config.stop_epoch + 1):
+        # Training Loop
         G.train()
         D.train()
         for batch in tqdm(dataloader.train, leave=False, ascii=True):
@@ -98,6 +99,7 @@ def main():
             lossG_train.step(lossG.item(), y.size(0))
             lossD_train.step(loss_advD.item(), y.size(0))
 
+        # Validation Loop
         G.eval()
         D.eval()
         for batch in tqdm(dataloader.valid, leave=False, ascii=True):

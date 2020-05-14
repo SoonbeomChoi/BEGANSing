@@ -1,30 +1,14 @@
 import torch
 import torch.nn.functional as F
 import torchaudio
-from torchaudio.transforms import Resample, Spectrogram
+from torchaudio.transforms import Resample, Spectrogram, GriffinLim
+from scipy import signal
 
 from torch_utils import set_device
 
 # Scale Methods
 def time2frame(x, frame_rate):
     return int(x*frame_rate)
-
-def frame(x, win_size, hop_size):
-    if x.dim() == 1:
-        num_frame = (x.size(0) - win_size)//hop_size + 1
-        y = x.new_zeros(win_size, num_frame)
-        for i in range(num_frame):
-            y[:,i] = x[hop_size*i:hop_size*i + win_size]
-    elif x.dim() == 2:
-        num_frame = (x.size(1) - win_size)//hop_size + 1
-        y = x.new_zeros(x.size(0), win_size, num_frame)
-        for i in range(x.size(0)):
-            for j in range(num_frame):
-                y[i,:,j] = x[i, hop_size*j:hop_size*j + win_size]
-    else:
-        raise AssertionError("Input dimension should be 1 or 2")
-
-    return y
 
 def to_tensor(x):
     if not isinstance(x, torch.Tensor):
@@ -56,11 +40,17 @@ def midi2hz(x):
 
     return 440.0*torch.pow(2.0, (x - 69)/12)
 
-def preemphasis(x, preemphasis):
-    return torchaudio.functional.lfilter(x, [1, -preemphasis], [1])
+def preemphasis(x, filter_coefficient):
+    x = x.squeeze(0).cpu().numpy()
+    x = signal.lfilter([1, -filter_coefficient], [1], x)
 
-def inv_preemphasis(x, preemphasis):
-    return torchaudio.functional.lfilter(x, [1], [1, -preemphasis])
+    return torch.from_numpy(x).float().unsqueeze(0)
+
+def deemphasis(x, filter_coefficient):
+    x = x.squeeze(0).cpu().numpy()
+    x = signal.lfilter([1], [1, -filter_coefficient], x)
+
+    return torch.from_numpy(x).float().unsqueeze(0)
 
 def normalize(x, min_db, max_db, clip_val):
     x = 2.0*(x - min_db)/(max_db - min_db) - 1.0
@@ -83,30 +73,22 @@ def load(filename, sample_rate):
 
     return y 
 
+def save(filename, wave, sample_rate):
+    torchaudio.save(filename, wave, sample_rate)
+
 # Spectral Methods
-def stft(y, config): 
+def stft(wave, config): 
     spec_fn = Spectrogram(n_fft=config.fft_size, 
                           win_length=config.win_size, 
                           hop_length=config.hop_size)
-    y, spec_fn = set_device((y, spec_fn), config.device, config.use_cpu)
-    spec = torch.sqrt(spec_fn(y))
+    wave, spec_fn = set_device((wave, spec_fn), config.device, config.use_cpu)
+    spec = torch.sqrt(spec_fn(wave))
 
     return spec
 
-def istft(magnitude, phase, config):
-    window = torch.hann_window(config.win_size)
-    stft_matrix = torch.stack((magnitude*torch.cos(phase), magnitude*torch.sin(phase)), dim=-1)
-    stft_matrix, window = set_device((stft_matrix, window), config.device, config.use_cpu)
-    y = torchaudio.functional.istft(stft_matrix,
-                                    n_fft=config.fft_size,
-                                    hop_length=config.hop_size,
-                                    win_length=config.win_size,
-                                    window=window)
-
-    return y
-
-def spectrogram(y, config, squeeze=True):
-    spec = stft(y, config)
+def spectrogram(wave, config, squeeze=True):
+    wave = preemphasis(wave, config.preemphasis)
+    spec = stft(wave, config)
     spec = amp2db(spec)
     spec = normalize(spec, config.min_db, config.max_db, config.clip_val)
 
@@ -114,3 +96,17 @@ def spectrogram(y, config, squeeze=True):
         spec = spec.squeeze(0)
     
     return spec
+
+def inv_spectrogram(spec, config):
+    griffin_lim = GriffinLim(n_fft=config.fft_size,
+                             win_length=config.win_size,
+                             hop_length=config.hop_size,
+                             n_iter=60)
+
+    spec, griffin_lim = set_device((spec, griffin_lim), config.device, config.use_cpu)
+
+    spec = db2amp(denormalize(spec, config.min_db, config.max_db, config.clip_val))
+    wave = griffin_lim(spec**config.spec_power)
+    wave = deemphasis(wave, config.preemphasis)
+
+    return wave

@@ -2,15 +2,16 @@ import yaml
 import argparse
 
 class Config(object):
-    def __init__(self, config_file=None):
+    def __init__(self, config_files=None):
         parser = None
-        if config_file is None:
+        if config_files is None:
             parser = argparse.ArgumentParser()
-            parser.add_argument('-f', '--file', type=str, default='./config/default.yml')
+            parser.add_argument('-f', '--files', nargs="*", type=str, default=['./config/default.yml'])
             namespace, _ = parser.parse_known_args()
-            config_file = namespace.file
+            config_files = namespace.files
 
-        self.load(config_file)
+        for f in config_files:
+            self.load(f)
         self.parse(parser)
     
     def load(self, filename):
