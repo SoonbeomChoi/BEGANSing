@@ -29,18 +29,24 @@ Change configurations before you run following steps and important parameters ar
 - data_mode: Dataloader mode, single: loading entire data on memory, multi: loading data with queue
 
 # Preprocessing
-- python preprocess.py -c config/default_train.yml --use_cpu True
+```python
+python preprocess.py -c config/default_train.yml --use_cpu True
+```
 
 You can speed up preprocessing by increasing the number of processes or 'num_proc'.
 You can use preprocess.py with GPU but 'num_proc' should be 1.
 
 # Training
-- python train.py -c config/default_train.yml --device 0 --batch_size 64
+```python
+python train.py -c config/default_train.yml --device 0 --batch_size 64
+```
 
 If your system doesn't have enough memory, you can change 'data_mode' to 'multi' which loads data with queue.
 
 # Inference
-- python infer.py -c config/default_infer.yml config/default_infer.yml --device 0
+```python
+python infer.py -c config/default_infer.yml config/default_infer.yml --device 0
+```
 
 Specify text file and checkpoint file in the configuration and the code assumes that MIDI file has same base name as text file.
 
