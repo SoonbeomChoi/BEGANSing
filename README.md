@@ -3,7 +3,7 @@ This repository contains PyTorch code for [Korean Singing Voice Synthesis based 
 
 </p>
 
-![Model Architecture Ver 5 small artboard 2](https://user-images.githubusercontent.com/15067112/67160811-804e5180-f38f-11e9-8304-1c99420d644a.jpg)
+![model architecture final 2 3](https://user-images.githubusercontent.com/15067112/81911402-3917fe80-9608-11ea-9718-8a61b564a618.jpg)
 <p align="center">Figure.1 Overview of the proposed singing voice synthesis system.</p>
 
 **You might test the code but it is still unstable**
