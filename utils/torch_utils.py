@@ -51,7 +51,7 @@ def unwrap_parallel(state_dict):
 
 def load_weights(checkpoint_path):
     state_dict = torch.load(checkpoint_path, map_location='cpu')['state_dict']
-    if from_parallel(state_dict): 
+    if from_parallel(state_dict):
         state_dict = unwrap_parallel(state_dict)
 
     return state_dict

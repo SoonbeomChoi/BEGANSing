@@ -43,8 +43,6 @@ def main():
     wave = dsp.inv_spectrogram(spec, config)
 
     savename = config.checkpoint_file.replace('.pt', '_') + os.path.basename(config.text_file).replace('.txt', '.wav')
-    print(wave.size())
-    print(savename)
     dsp.save(savename, wave, config.sample_rate)
 
     print("Audio saved to \'%s\'." % (savename))
