@@ -7,7 +7,8 @@ This repository contains PyTorch code for [Korean Singing Voice Synthesis based 
 <p align="center"><b>Overview of the proposed system</b></p>
 
 # Pre-requisites
-Tested on Python 3.7 and PyTorch 1.5
+Install PyTorch based on official PyTorch website, https://pytorch.org/.
+Then install packages in requirements.txt.
 ```bash
 pip install -r requirements.txt
 ```
