@@ -173,6 +173,7 @@ def main():
         list_file = set_type + '_list.txt'
         file_list[set_type] = read_file_list(os.path.join(config.dataset_path, list_file))
 
+    # Extracting Features
     if config.num_proc > 1:
         if config.use_cpu is False:
             raise AssertionError("You can not use GPU with multiprocessing.")
