@@ -51,7 +51,7 @@ def unwrap_parallel(state_dict):
 
 def load_weights(checkpoint_path):
     state_dict = torch.load(checkpoint_path, map_location='cpu')['state_dict']
-    if from_parallel: 
+    if from_parallel(state_dict): 
         state_dict = unwrap_parallel(state_dict)
 
     return state_dict
@@ -76,12 +76,10 @@ def load_checkpoint(checkpoint_path, model, optimizer=None, verbose=False):
     checkpoint = torch.load(checkpoint_path, map_location='cpu')
     if 'state_dict' in checkpoint:
         state_dict = checkpoint['state_dict']
-    elif 'model' in checkpoint:
-        state_dict = checkpoint['model'].state_dict()
     else:
         raise AssertionError("No model weight found in checkpoint, %s" % (checkpoint_path))
 
-    if from_parallel: 
+    if from_parallel(state_dict): 
         state_dict = unwrap_parallel(state_dict)
 
     model.load_state_dict(state_dict)

@@ -190,7 +190,7 @@ def main():
         file_indices = make_indices(path)
         torch.save(file_indices, os.path.join(config.feature_path, set_type + '_indices.pt'))
 
-    print("Feature saved to \'%s\'" % (config.feature_path))
+    print("Feature saved to \'%s\'." % (config.feature_path))
 
 if __name__ == "__main__":
     main()

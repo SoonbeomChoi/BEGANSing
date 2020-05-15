@@ -57,8 +57,6 @@ class Config(object):
                 value = getattr(self, var)
                 print('| ' + var + ': ' + str(value))
 
-            print('\n')
-
 def main():
     config = Config()
 
