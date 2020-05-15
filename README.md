@@ -48,6 +48,10 @@ python train.py -c config/default_train.yml --device 0 --batch_size 32
 ```
 
 If your system doesn't have enough memory, you can change 'data_mode' to 'multi' which loads data with queue.
+Also type following command for tensorboard monitoring.
+```bash
+tensorboard --logdir=checkpoint/default
+```
 
 # Inference
 ```bash

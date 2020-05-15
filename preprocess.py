@@ -11,8 +11,8 @@ from functools import partial
 
 import korean_g2p
 import dsp
-import file_utils
 from config_parser import Config
+from file_utils import create_path
 
 def load_text(filename):
     text_file = open(filename)
@@ -145,13 +145,27 @@ def read_file_list(filename):
 
     return file_list
 
+def make_indices(path):
+    num_features = []
+    for f in sorted(os.listdir(path)):
+        num_feature = len(torch.load(os.path.join(path, f)))
+        num_features.append(num_feature)
+
+    num_features = torch.tensor(num_features)
+    file_indices = torch.cumsum(num_features, dim=0)
+
+    return file_indices
+
 def main():
     config = Config()
     set_list = ['train', 'valid']
     file_list = {}
+
+    # Creating Path for Features
+    create_path(config.feature_path, action='overwrite')
     for set_type in set_list:
         path = os.path.join(config.feature_path, set_type)
-        file_utils.create_path(path, action='overwrite')
+        create_path(path, action='overwrite')
 
         list_file = set_type + '_list.txt'
         file_list[set_type] = read_file_list(os.path.join(config.dataset_path, list_file))
@@ -166,6 +180,12 @@ def main():
     else:
         for set_type in set_list:
             [preprocess(f, set_type=set_type, config=config) for f in file_list[set_type]]
+
+    # Creating Files Indices
+    for set_type in set_list:
+        path = os.path.join(config.feature_path, set_type)
+        file_indices = make_indices(path)
+        torch.save(os.path.join(config.feature_path, set_type + '_indices.pt'), file_indices)
 
     print("Feature saved to %s" % (config.feature_path))
 

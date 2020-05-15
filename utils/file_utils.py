@@ -15,7 +15,7 @@ def create_path(path, action="duplicate", verbose=True):
     created_path = path
     if os.path.exists(path):
         if action is "overwrite":
-            os.makedirs(path, exist_ok=True)
+            os.makedirs(path)
         elif action is "duplicate":
             created_path = duplicate_path(path)
         elif action is "error":

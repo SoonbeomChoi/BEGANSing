@@ -35,7 +35,7 @@ class MultiLoader(Dataset):
     def __init__(self, path):
         self.path = path
         self.file_index = 0
-        self.file_indices = torch.load(os.path.join(path, 'indices.pt'))
+        self.file_indices = torch.load(path + '_indices.pt')
 
     def __getitem__(self, index):
         file_list = sorted(os.listdir(self.path))
