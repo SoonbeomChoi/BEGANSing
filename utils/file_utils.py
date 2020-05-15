@@ -14,11 +14,11 @@ def duplicate_path(path):
 def create_path(path, action="duplicate", verbose=True):
     created_path = path
     if os.path.exists(path):
-        if action is "overwrite":
+        if action == 'overwrite':
             os.makedirs(path)
-        elif action is "duplicate":
+        elif action == 'duplicate':
             created_path = duplicate_path(path)
-        elif action is "error":
+        elif action == 'error':
             raise AssertionError("\'%s\' already exists." % path)
         else: 
             raise AssertionError("Invalid action is used.")
