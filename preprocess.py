@@ -185,7 +185,7 @@ def main():
     for set_type in set_list:
         path = os.path.join(config.feature_path, set_type)
         file_indices = make_indices(path)
-        torch.save(os.path.join(config.feature_path, set_type + '_indices.pt'), file_indices)
+        torch.save(file_indices, os.path.join(config.feature_path, set_type + '_indices.pt'))
 
     print("Feature saved to %s" % (config.feature_path))
 
