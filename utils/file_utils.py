@@ -15,9 +15,9 @@ def create_path(path, action="duplicate", verbose=True):
     created_path = path
     verbose_message = 'created'
     if os.path.exists(path):
-        if action == 'overwritten':
+        if action == 'overwrite':
             os.makedirs(path, exist_ok=True)
-            verbose_message = 'overwrited'
+            verbose_message = 'overwritten'
         elif action == 'duplicate':
             created_path = duplicate_path(path)
         elif action == 'error':
