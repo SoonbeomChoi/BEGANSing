@@ -10,7 +10,7 @@ This repository contains PyTorch code for [Korean Singing Voice Synthesis based 
 
 # Dataset
 In the paper we used our own dataset and we plan to release the dataset. 
-If you want to use your own dataset, the dataset needs to meet few conditions.
+But if you want to use your own dataset, the dataset needs to meet few conditions.
 
 Each song must have text(.txt), MIDI(.mid) and audio(.wav) and MIDI and audio should be temporally aligned. Currently the system only supports Korean. Text files assume to have the same number of syllables as MIDI notes then the text is aligned using MIDI note duration. You can follow the structure of 'sample_dataset'.
 
