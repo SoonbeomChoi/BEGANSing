@@ -56,14 +56,14 @@ def align_label(text, note, config):
     return text_aligned, note_aligned
 
 def files4train(filename, config):
-    basestem = os.path.basename(filename).replace('.wav', '')
+    basename = os.path.basename(filename)
     type_list = ['txt', 'mid', 'wav']
     file_list = []
     for t in type_list:
         if config.file_structure == 1:
-            f = os.path.join(config.dataset_path, basestem + '.' + t)
+            f = os.path.join(config.dataset_path, basename + '.' + t)
         elif config.file_structure == 2:
-            f = os.path.join(config.dataset_path, t, basestem + '.' + t)
+            f = os.path.join(config.dataset_path, t, basename + '.' + t)
         else:
             raise AssertionError("There is no file structure type for %s" % (config.file_structure))
         
@@ -72,7 +72,7 @@ def files4train(filename, config):
     return file_list
 
 def files4infer(filename, config):
-    basestem = os.path.basename(filename).replace('.txt', '')
+    basename = os.path.basename(filename).replace('.txt', '')
     filepath = os.path.dirname(filename)
     if config.file_structure == 2:
         filepath = '/'.join(filepath.split('/')[:-1])
@@ -81,9 +81,9 @@ def files4infer(filename, config):
     file_list = []
     for t in type_list:
         if config.file_structure == 1:
-            f = os.path.join(filepath, basestem + '.' + t)
+            f = os.path.join(filepath, basename + '.' + t)
         elif config.file_structure == 2:
-            f = os.path.join(filepath, t, basestem + '.' + t)
+            f = os.path.join(filepath, t, basename + '.' + t)
         else:
             raise AssertionError("There is no file structure type for %s" % (config.file_structure))
 
@@ -132,10 +132,10 @@ def preprocess(filename, set_type, config):
         data_list.append(data)
 
     if not infer:
-        basestem = os.path.basename(filename).replace('.wav', '')
-        savename = os.path.join(config.feature_path, set_type, basestem + '.pt')
+        basename = os.path.basename(filename)
+        savename = os.path.join(config.feature_path, set_type, basename + '.pt')
         torch.save(data_list, savename)
-        print(basestem)
+        print(basename)
 
     return data_list
 

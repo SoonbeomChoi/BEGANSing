@@ -101,6 +101,7 @@ def inv_spectrogram(spec, config):
     griffin_lim = GriffinLim(n_fft=config.fft_size,
                              win_length=config.win_size,
                              hop_length=config.hop_size,
+                             power=1,
                              n_iter=60)
 
     spec, griffin_lim = set_device((spec, griffin_lim), config.device, config.use_cpu)
