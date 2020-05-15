@@ -34,12 +34,14 @@ class SingleLoader(Dataset):
 class MultiLoader(Dataset):
     def __init__(self, path):
         self.path = path
+        self.file_list = sorted(os.listdir(path))
         self.file_index = 0
         self.file_indices = torch.load(path + '_indices.pt')
 
     def __getitem__(self, index):
-        file_list = sorted(os.listdir(self.path))
-        filename = os.path.join(self.path, file_list[self.file_index])
+        self.file_index = torch.nonzero(self.file_indices > index)[0].item()
+
+        filename = os.path.join(self.path, self.file_list[self.file_index])
         data = torch.load(filename)
 
         return_index = index
