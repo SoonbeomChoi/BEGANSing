@@ -39,9 +39,10 @@ def criterionAdv(D, x):
 
 def main():
     config = Config()
+    config_basename = os.path.basename(config.configs[0])
+    print("Configuration file: \'%s\'" % (config_basename))
 
     checkpoint_path = create_path(config.checkpoint_path, action=config.checkpoint_path_action)
-    config_basename = os.path.basename(config.configs[0])
     config.save(os.path.join(checkpoint_path, config_basename))
     logger = Logger(os.path.join(checkpoint_path, 'log'))
 
@@ -63,6 +64,8 @@ def main():
     lossG_train = AverageMeter()
     lossG_valid = AverageMeter()
     lossD_train = AverageMeter()
+
+    print('Training start')
     for epoch in range(config.stop_epoch + 1):
         # Training Loop
         G.train()
@@ -131,6 +134,8 @@ def main():
             savename = os.path.join(checkpoint_path, 'epoch' + str(epoch) + '_')
             save_checkpoint(savename + 'G.pt', G, optimizerG, learn_rate, lossG_train.steps)
             save_checkpoint(savename + 'D.pt', D, optimizerD, learn_rate, lossD_train.steps)
+
+    print('Training finished')
 
 if __name__ == "__main__":
     main()

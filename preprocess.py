@@ -158,6 +158,9 @@ def make_indices(path):
 
 def main():
     config = Config()
+    config_basename = os.path.basename(config.configs[0])
+    print("Configuration file: \'%s\'" % (config_basename))
+
     set_list = ['train', 'valid']
     file_list = {}
 
@@ -187,7 +190,7 @@ def main():
         file_indices = make_indices(path)
         torch.save(file_indices, os.path.join(config.feature_path, set_type + '_indices.pt'))
 
-    print("Feature saved to %s" % (config.feature_path))
+    print("Feature saved to \'%s\'" % (config.feature_path))
 
 if __name__ == "__main__":
     main()

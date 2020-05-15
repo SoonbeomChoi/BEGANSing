@@ -1,7 +1,7 @@
 # Path Configuration
 file_structure: 2 # File structure type, 1: all the files in one folder, 2: .txt, .mid, .wav are in separated folders
 text_file: 'sample_dataset/txt/little_star.txt' # Text file path for inference
-checkpoint_file: 'checkpoint/default/latest_G.pt' # Model checkpoint file path to load
+checkpoint_file: 'checkpoint/pretrained/pretrained_epoch200.pt' # Model checkpoint file path to load
 
 # Infer Configuration
 num_proc: 1 # Number of processes, might be used for non-auto-regressive inference
