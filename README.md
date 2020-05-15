@@ -84,6 +84,6 @@ Audio samples at: https://soonbeomchoi.github.io/saebyulgan-blog/.
 - g2p/korean_g2p.py from https://github.com/scarletcho/KoG2P
 
 # To Do
-- To upload pre-trained model and publish pre-trained model to torchhub.
+- To update pre-trained model and publish pre-trained model to torchhub.
 - To offer English based text interface for non-Korean speakers.
 - To open the dataset used in the paper.
