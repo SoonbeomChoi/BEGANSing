@@ -39,7 +39,7 @@ class MultiLoader(Dataset):
         self.file_indices = torch.load(path + '_indices.pt')
 
     def __getitem__(self, index):
-        self.file_index = torch.nonzero(self.file_indices > index)[0].item()
+        self.file_index = (self.file_indices > index).nonzero()[0].item()
 
         filename = os.path.join(self.path, self.file_list[self.file_index])
         data = torch.load(filename)
