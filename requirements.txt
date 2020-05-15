@@ -1,0 +1,7 @@
+madmom
+pyyamml
+scipy
+tensorboard
+torch
+torchaudio
+tqdm
