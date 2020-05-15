@@ -6,6 +6,12 @@ This repository contains PyTorch code for [Korean Singing Voice Synthesis based 
 ![model architecture final 2 3](https://user-images.githubusercontent.com/15067112/81911402-3917fe80-9608-11ea-9718-8a61b564a618.jpg)
 <p align="center"><b>Overview of the proposed system</b></p>
 
+# Pre-requisites
+Tested on Python 3.7 and PyTorch 1.5
+```bash
+pip install -r requirements.txt
+```
+
 # Dataset
 In the paper we used our own dataset and we plan to release the dataset. 
 But if you want to use your own dataset, the dataset needs to meet few conditions as below or follow the the structure of 'sample_dataset'.
