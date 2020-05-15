@@ -1,6 +1,5 @@
 madmom
 pyyaml
-scipy
 tensorboard
 torchaudio
 tqdm

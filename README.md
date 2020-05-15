@@ -7,11 +7,26 @@ This repository contains PyTorch code for [Korean Singing Voice Synthesis based 
 <p align="center"><b>Overview of the proposed system</b></p>
 
 # Pre-requisites
-Install PyTorch based on official website, https://pytorch.org/.
-Then install packages in requirements.txt.
+- Install PyTorch based on official website, https://pytorch.org/.
+- Install pre-requisites for [Madmom](https://madmom.readthedocs.io/en/latest/installation.html).
+- Then install packages in requirements.txt.
 ```bash
 pip install -r requirements.txt
 ```
+
+**Tested environments**
+<table>
+    <tr>
+        <th> Python </th>
+        <th> CUDA </th>
+        <th> PyTorch </th>
+    </tr>
+    <tr>
+        <th> 3.7 </th>
+        <th> 10.2 </th>
+        <th> 1.5 </th>
+    </tr>
+</table>
 
 # Dataset
 In the paper we used our own dataset and we plan to release the dataset. 
