@@ -29,7 +29,7 @@ Change configurations before you run following steps and important parameters ar
 - data_mode: Dataloader mode, single: loading entire data on memory, multi: loading data with queue
 
 # Preprocessing
-```python
+```bash
 python preprocess.py -c config/default_train.yml --use_cpu True
 ```
 
@@ -37,14 +37,14 @@ You can speed up preprocessing by increasing the number of processes or 'num_pro
 You can use preprocess.py with GPU but 'num_proc' should be 1.
 
 # Training
-```python
+```bash
 python train.py -c config/default_train.yml --device 0 --batch_size 64
 ```
 
 If your system doesn't have enough memory, you can change 'data_mode' to 'multi' which loads data with queue.
 
 # Inference
-```python
+```bash
 python infer.py -c config/default_infer.yml config/default_infer.yml --device 0
 ```
 
