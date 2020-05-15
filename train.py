@@ -40,7 +40,7 @@ def criterionAdv(D, x):
 def main():
     config = Config()
 
-    checkpoint_path = create_path(config.checkpoint_path)
+    checkpoint_path = create_path(config.checkpoint_path, action=config.checkpoint_path_action)
     config_basename = os.path.basename(config.configs[0])
     config.save(os.path.join(checkpoint_path, config_basename))
     logger = Logger(os.path.join(checkpoint_path, 'log'))

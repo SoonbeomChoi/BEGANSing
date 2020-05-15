@@ -162,7 +162,7 @@ def main():
     file_list = {}
 
     # Creating Path for Features
-    create_path(config.feature_path, action='overwrite')
+    create_path(config.feature_path, action='overwrite', verbose=False)
     for set_type in set_list:
         path = os.path.join(config.feature_path, set_type)
         create_path(path, action='overwrite')
