@@ -26,16 +26,16 @@ pip install -r requirements.txt
         <th> TorchAudio </th>
     </tr>
     <tr>
-        <td><p style="text-align:center"> 3.6 ~ 3.8 </p></td>
-        <td><p style="text-align:center"> 10.2 </p></td>
-        <td><p style="text-align:center"> 1.5 </p></td>
-        <td><p style="text-align:center"> 0.5 </p></td>
+        <td style="text-align:center"> 3.6 ~ 3.8 </td>
+        <td style="text-align:center"> 10.2 </td>
+        <td style="text-align:center"> 1.5 </td>
+        <td style="text-align:center"> 0.5 </td>
     </tr>
     <tr>
-        <td><p style="text-align:center"> 3.7 </p></td>
-        <td><p style="text-align:center"> 10.1 </p></td>
-        <td><p style="text-align:center"> 1.5 </p></td>
-        <td><p style="text-align:center"> 0.5 </p></td>
+        <td style="text-align:center"> 3.7 </td>
+        <td style="text-align:center"> 10.1 </td>
+        <td style="text-align:center"> 1.5 </td>
+        <td style="text-align:center"> 0.5 </td>
     </tr>
 </table>
 
