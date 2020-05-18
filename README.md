@@ -23,7 +23,7 @@ pip install -r requirements.txt
         <th> Python </th>
         <th> CUDA </th>
         <th> PyTorch </th>
-        <th> TorchAudio </th>
+        <th> Torchaudio </th>
     </tr>
     <tr>
         <td style="text-align:center"> 3.6 ~ 3.8 </td>
@@ -99,4 +99,5 @@ Audio samples at: https://soonbeomchoi.github.io/saebyulgan-blog/. Model was tra
 # To Do
 - To publish pre-trained model on torchhub.
 - To offer English based text interface for non-Korean speakers.
+- To remove scipy dependency in utils/dsp.py. Scipy is only used for scipy.signal.lfilter because torchaudio.functional.lfilter is slow.
 - To open the dataset used in the paper.
