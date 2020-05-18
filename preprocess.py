@@ -97,7 +97,7 @@ def zero_pad(x, pad_length):
     return torch.cat((x, pad))
 
 def preprocess(filename, set_type, config):
-    infer = set_type is 'infer'
+    infer = set_type == 'infer'
     if not infer:
         txt_file, mid_file, wav_file = files4train(filename, config)
     else:
