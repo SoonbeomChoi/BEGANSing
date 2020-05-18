@@ -21,11 +21,19 @@ pip install -r requirements.txt
         <th> Python </th>
         <th> CUDA </th>
         <th> PyTorch </th>
+        <th> TorchAudio </th>
+    </tr>
+    <tr>
+        <th> 3.6 ~ 3.8 </th>
+        <th> 10.2 </th>
+        <th> 1.5 </th>
+        <th> 0.5 </th>
     </tr>
     <tr>
         <th> 3.7 </th>
-        <th> 10.2 </th>
+        <th> 10.1 </th>
         <th> 1.5 </th>
+        <th> 0.5 </th>
     </tr>
 </table>
 
@@ -79,12 +87,14 @@ Specify text file and checkpoint file in the configuration and MIDI file is assu
 You can also use pre-trained model from https://drive.google.com/file/d/1JqCD-kxba2meSlApWr06b2nzqLv3U-j_/view?usp=sharing.
 
 # Results
-Audio samples at: https://soonbeomchoi.github.io/saebyulgan-blog/.
+Audio samples at: https://soonbeomchoi.github.io/saebyulgan-blog/. Model was trained at RTX2080 Ti with batch size 32 for 2 days.
+![BEGANSing tensorboard](https://user-images.githubusercontent.com/15067112/82179828-34aa5900-991a-11ea-9f73-b85aad109cea.png)
 
 # License 
 - g2p/korean_g2p.py from https://github.com/scarletcho/KoG2P
+- utils/midi_utils.py from Madmom, https://madmom.readthedocs.io/en/latest/
 
 # To Do
-- To update pre-trained model and publish pre-trained model to torchhub.
+- To publish pre-trained model on torchhub.
 - To offer English based text interface for non-Korean speakers.
 - To open the dataset used in the paper.
