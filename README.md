@@ -16,6 +16,12 @@ pip install -r requirements.txt
 ```
 
 **Tested environments**
+<style>
+td {
+    text-align:center
+}
+</style>
+
 <table>
     <tr>
         <th> Python </th>
