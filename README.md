@@ -16,12 +16,6 @@ pip install -r requirements.txt
 ```
 
 **Tested environments**
-<style>
-td {
-    text-align:center;
-}
-</style>
-
 <table>
     <tr>
         <th> Python </th>
@@ -30,16 +24,16 @@ td {
         <th> TorchAudio </th>
     </tr>
     <tr>
-        <td> 3.6 ~ 3.8 </td>
-        <td> 10.2 </td>
-        <td> 1.5 </td>
-        <td> 0.5 </td>
+        <td style="text-align:center"> 3.6 ~ 3.8 </td>
+        <td style="text-align:center"> 10.2 </td>
+        <td style="text-align:center"> 1.5 </td>
+        <td style="text-align:center"> 0.5 </td>
     </tr>
     <tr>
-        <td> 3.7 </td>
-        <td> 10.1 </td>
-        <td> 1.5 </td>
-        <td> 0.5 </td>
+        <td style="text-align:center"> 3.7 </td>
+        <td style="text-align:center"> 10.1 </td>
+        <td style="text-align:center"> 1.5 </td>
+        <td style="text-align:center"> 0.5 </td>
     </tr>
 </table>
 
