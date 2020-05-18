@@ -99,5 +99,5 @@ Audio samples at: https://soonbeomchoi.github.io/saebyulgan-blog/. Model was tra
 # To Do
 - To publish pre-trained model on torchhub.
 - To offer English based text interface for non-Korean speakers.
-- To remove scipy dependency in utils/dsp.py. Scipy is only used for scipy.signal.lfilter because torchaudio.functional.lfilter is slow.
+- To remove scipy dependency in utils/dsp.py. Scipy is used only for scipy.signal.lfilter because torchaudio.functional.lfilter is slow.
 - To open the dataset used in the paper.
