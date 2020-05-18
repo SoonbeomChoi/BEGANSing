@@ -1,8 +1,8 @@
 # Korean Singing Voice Synthesis based on Auto-regressive Boundary Equilibrium GAN
+<p>
 Our research project develops a Korean singing voice synthesis system using deep neural network. The system generates singing voice from a given text and MIDI in an end-to-end manner. 
 
 This repository contains PyTorch implementation for [Korean Singing Voice Synthesis based on Auto-regressive Boundary Equilibrium GAN](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9053950).
-
 </p>
 
 ![model architecture final 2 3](https://user-images.githubusercontent.com/15067112/81911402-3917fe80-9608-11ea-9718-8a61b564a618.jpg)
