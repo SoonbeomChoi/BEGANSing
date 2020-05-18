@@ -77,7 +77,7 @@ python infer.py -c config/default_train.yml config/default_infer.yml --device 0
 ```
 
 Specify text file and checkpoint file in the configuration and MIDI file is assumed to have same file name as text file. Together with train configuration, infer configuration is given then the configurations are merged.
-You can also use pre-trained model from https://drive.google.com/open?id=1RjsD91cJD0hugOfXV_YfhNihaNGQnzUg.
+You can also use pre-trained model from https://drive.google.com/file/d/1JqCD-kxba2meSlApWr06b2nzqLv3U-j_/view?usp=sharing.
 
 # Results
 Audio samples at: https://soonbeomchoi.github.io/saebyulgan-blog/.

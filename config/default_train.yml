@@ -3,7 +3,7 @@ file_structure: 2 # File structure type, 1: all the files in one folder, 2: .txt
 dataset_path: 'sample_dataset' # Path for raw dataset containing txt, mid, wav
 feature_path: 'feature/default' # Path for feature created using preprocess.py
 checkpoint_path: 'checkpoint/default' # Path for checkpoint and tensorboard log created using train.py
-checkpoint_path_action: 'duplicate'
+checkpoint_path_action: 'duplicate' # Action to make path for checkpoint
 
 # Feature Configuration 
 num_char: 47 # The types of characters

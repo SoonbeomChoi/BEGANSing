@@ -91,6 +91,11 @@ def files4infer(filename, config):
 
     return file_list
 
+def zero_pad(x, pad_length):
+    pad = x.new_zeros(pad_length)
+
+    return torch.cat((x, pad))
+
 def preprocess(filename, set_type, config):
     infer = set_type is 'infer'
     if not infer:
@@ -102,7 +107,13 @@ def preprocess(filename, set_type, config):
     note = load_midi(mid_file)
     text, note = align_label(text, note, config)
 
+    # Zero pad to make 1 more iteration
     data_stride = config.spec_length
+    if text.size(0)%data_stride != 0:
+        pad_length = (text.size(0)//data_stride + 1)*data_stride - text.size(0)
+        text = zero_pad(text, pad_length)
+        note = zero_pad(note, pad_length)
+
     num_stride = text.size(0)//data_stride
 
     if not infer:
