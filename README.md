@@ -10,7 +10,6 @@ This repository contains PyTorch implementation for [Korean Singing Voice Synthe
 
 # Pre-requisites
 - Install PyTorch based on official website, https://pytorch.org/.
-- Install pre-requisites for [Madmom](https://madmom.readthedocs.io/en/latest/installation.html).
 - Then install packages in requirements.txt.
 ```bash
 pip install -r requirements.txt
