@@ -5,7 +5,6 @@ sys.path.append('g2p')
 import os 
 import torch 
 import torchaudio 
-from madmom.io.midi import load_midi 
 from multiprocessing import Pool 
 from functools import partial
 
@@ -13,6 +12,7 @@ import korean_g2p
 import dsp
 from config_parser import Config
 from file_utils import create_path
+from midi_utils import load_midi
 
 def load_text(filename):
     text_file = open(filename)
