@@ -16,7 +16,7 @@ pip install -r requirements.txt
 ```
 
 **Tested environments**
-<table>
+<table style="width: 100%">
     <tr>
         <th> Python </th>
         <th> CUDA </th>
