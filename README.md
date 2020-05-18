@@ -18,7 +18,7 @@ pip install -r requirements.txt
 **Tested environments**
 <style>
 td {
-    text-align:center
+    text-align:center;
 }
 </style>
 
