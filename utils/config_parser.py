@@ -6,9 +6,9 @@ class Config(object):
         parser = None
         if config_files is None:
             parser = argparse.ArgumentParser()
-            parser.add_argument('-c', '--configs', nargs="*", type=str, default=['./config/default.yml'])
+            parser.add_argument('-c', '--config', nargs="*", type=str, default=['./config/default.yml'])
             namespace, _ = parser.parse_known_args()
-            config_files = namespace.configs
+            config_files = namespace.config
 
         for c in config_files:
             self.load(c)
@@ -23,7 +23,7 @@ class Config(object):
     def save(self, filename=None, verbose=False):
         yaml_dict = dict()
         for var in vars(self):
-            if var not in ['file', 'verbose']:
+            if var not in ['config', 'verbose']:
                 value = getattr(self, var)
                 yaml_dict[var] = value
 
