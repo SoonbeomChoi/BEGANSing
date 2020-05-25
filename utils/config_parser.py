@@ -47,7 +47,7 @@ class Config(object):
             self.verbose(args.verbose)
 
             for var in vars(args):
-                if var not in ['f', 'v']:
+                if var not in ['c', 'v']:
                     setattr(self, var, getattr(args, var))
             
     def verbose(self, v):
