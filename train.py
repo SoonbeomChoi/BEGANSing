@@ -39,7 +39,7 @@ def criterionAdv(D, x):
 
 def main():
     config = Config()
-    config_basename = os.path.basename(config.configs[0])
+    config_basename = os.path.basename(config.config[0])
     print("Configuration file: \'%s\'" % (config_basename))
 
     checkpoint_path = create_path(config.checkpoint_path, action=config.checkpoint_path_action)

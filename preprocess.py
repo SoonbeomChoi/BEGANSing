@@ -169,7 +169,7 @@ def make_indices(path):
 
 def main():
     config = Config()
-    config_basename = os.path.basename(config.configs[0])
+    config_basename = os.path.basename(config.config[0])
     print("Configuration file: \'%s\'" % (config_basename))
 
     set_list = ['train', 'valid']
